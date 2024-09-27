@@ -6,6 +6,7 @@ import os
 import pathlib
 import inspect
 from dotenv import load_dotenv
+from natsort import natsorted
 from PIL import Image
 from skimage.color import rgb2gray
 from skimage.feature import graycomatrix, graycoprops
@@ -35,13 +36,19 @@ def extractImg(dir):
 
     # Trigger to stop the function just to test file sso you dont have to wait an hours to see the result
     trig = 0
-    for filename in os.listdir(dir):
+
+    # Using natsorted from natsort to sort the confusing file looping
+    files = natsorted(os.listdir(dir))
+
+    for filename in files:
         # using opencv to track/read the image from directory path through the loop
         img = cv2.imread(os.path.join(dir, filename))
         # just to make sure the path is right and check if the image is empty or not
         if img is None:
             print("Error empty")
             break
+
+        print("extracting: ", filename)
 
         # to convert the image to grayscale image using opencv
         grayImg = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -67,10 +74,6 @@ def extractImg(dir):
         }
         extract_list.append(ext_dict)
         # Uncomment the trigger if you wanna extract all the image
-        trig += 1
-        if trig == 5:
-            break
-
     return pd.DataFrame.from_dict(extract_list)
 
 
@@ -88,6 +91,8 @@ print(karacadag_df)
 frames = [arborio_df, basmati_df, ipsala_df, jasmine_df, karacadag_df]
 # Variable that contain all the classes dataframe then merged into one dataframe
 # Uncomment the function below to convert the dataframe to csv
-# merged_df = pd.concat(frames, axis=1)
-# print(merged_df)
-# merged_df.to_csv(r"C:/Users/naufa/Documents/mlInit/rice-GLCM/data/processed/rice-extract.csv")
+merged_df = pd.concat(frames, axis=1)
+print(merged_df)
+merged_df.to_csv(
+    r"C:/Users/naufa/Documents/mlInit/rice-GLCM/data/processed/rice-extract.csv"
+)
