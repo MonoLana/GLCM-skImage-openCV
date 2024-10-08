@@ -29,7 +29,6 @@ karacadag_dir = os.getenv("KARACADAG_DIR")
 def extractImg(dir):
     # Example to make dataframe
     dir_name = os.path.basename(dir)
-    df = pd.DataFrame(columns=["_contrast", "_homogeneity", "_energy", "_correlation"])
 
     # an empty list to keep the dictionary list
     extract_list = []
@@ -67,13 +66,28 @@ def extractImg(dir):
 
         # dictionary to keep as temporary place before append to dataframe
         ext_dict = {
-            f"{dir_name}_contrast": contrast[0][0],
-            f"{dir_name}_homogeneity": homogeneity[0][0],
-            f"{dir_name}_energy": energy[0][0],
-            f"{dir_name}_correlation": correlation[0][0],
+            f"{dir_name}_0_contrast": contrast[0][0],
+            f"{dir_name}_45_contrast": contrast[0][1],
+            f"{dir_name}_90_contrast": contrast[0][2],
+            f"{dir_name}_135_contrast": contrast[0][3],
+            f"{dir_name}_0_homogeneity": homogeneity[0][0],
+            f"{dir_name}_45_homogeneity": homogeneity[0][1],
+            f"{dir_name}_90_homogeneity": homogeneity[0][2],
+            f"{dir_name}_135_homogeneity": homogeneity[0][3],
+            f"{dir_name}_0_energy": energy[0][0],
+            f"{dir_name}_45_energy": energy[0][1],
+            f"{dir_name}_90_energy": energy[0][2],
+            f"{dir_name}_135_energy": energy[0][3],
+            f"{dir_name}_0_correlation": correlation[0][0],
+            f"{dir_name}_45_correlation": correlation[0][1],
+            f"{dir_name}_90_correlation": correlation[0][2],
+            f"{dir_name}_135_correlation": correlation[0][3],
         }
         extract_list.append(ext_dict)
         # Uncomment the trigger if you wanna extract all the image
+        trig += 1
+        if trig == 5:
+            break
     return pd.DataFrame.from_dict(extract_list)
 
 
@@ -92,7 +106,5 @@ frames = [arborio_df, basmati_df, ipsala_df, jasmine_df, karacadag_df]
 # Variable that contain all the classes dataframe then merged into one dataframe
 # Uncomment the function below to convert the dataframe to csv
 merged_df = pd.concat(frames, axis=1)
-print(merged_df)
-merged_df.to_csv(
-    r"C:/Users/naufa/Documents/mlInit/rice-GLCM/data/processed/rice-extract.csv"
-)
+# print(merged_df)
+# merged_df.to_csv(r"C:/Users/naufa/Documents/mlInit/rice-GLCM/data/processed/rice-extract.csv")
